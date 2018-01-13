@@ -22,7 +22,7 @@
 #define HCS12SS59T_SPI_MOSI PB3
 #define HCS12SS59T_SPI_SCK PB5
 #define HCS12SS59T_SPI_SS_N PB2
-#define HCS12SS59T_SPI_RESET_N PB0
+#define HCS12SS59T_SPI_RESET_N PB1
 
 /* Display commands and information */
 #define HCS12SS59T_DCRAM_WR 0x10 /* ccccaaaa dddddddd dddddddd .. */

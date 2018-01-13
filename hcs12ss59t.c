@@ -127,6 +127,26 @@ void hcs12ss59t_set_buffer(char *data)
 }
 
 /**
+ * @brief hcs12ss59t_set_character set user configurable characters
+ * @param addr character number (0 - 15)
+ * @param data data array, 2 bytes per character
+ * @param nchar Amount of characters to update (auto increment)
+ */
+void hcs12ss59t_set_character(int addr, char *data, int nchar)
+{
+	char *ptr;
+
+	nchar = nchar * 2;
+
+	HCS12SS59T_SELECT;
+	hcs12ss59t_send_byte(HCS12SS59T_CGRAM_WR | (addr & 0x0f));
+	for (ptr = data; ptr < data + nchar; ++ptr) {
+		hcs12ss59t_send_byte(*ptr);
+	}
+	HCS12SS59T_DESELECT;
+}
+
+/**
  * @brief hcs12ss59t_set_lights Set the display mode to on, off or test
  * @param lights value, use constants HCS12SS59T_LI*
  */

@@ -52,6 +52,7 @@ void hcs12ss59t_set_text(char *text);
 void hcs12ss59t_set_buffer(char *data);
 void hcs12ss59t_set_brightness(char brightness);
 void hcs12ss59t_set_lights(char lights);
+void hcs12ss59t_set_character(int addr, char *data, int nchar);
 
 /* Low level functions */
 void hcs12ss59t_send_byte(char c);

@@ -64,7 +64,7 @@ void hcs12ss59t_send_byte(char c)
 void hcs12ss59t_send_cmd(char cmd, char arg)
 {
 	HCS12SS59T_SELECT;
-	hcs12ss59t_send_byte(cmd | arg);
+	hcs12ss59t_send_byte(cmd | (arg & 0x0f));
 	HCS12SS59T_DESELECT;
 }
 

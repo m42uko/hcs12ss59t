@@ -22,6 +22,9 @@ char hcs12ss59t_get_char(char c)
 		c += 16;
 	else if (c >= 'a' && c <= 'z')
 		c -= 80;
+	else if (c == 0) {
+		c = ' ' - 48;
+	}
 	else
 		c = 79;
 	return c;

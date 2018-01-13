@@ -90,7 +90,7 @@ void hcs12ss59t_reset()
 
 	/* Configure controlller for VFD */
 	hcs12ss59t_send_cmd(HCS12SS59T_NUMDIGIT, HCS12SS59T_NUMDIGITS);
-	hcs12ss59t_send_cmd(HCS12SS59T_LIGHTS, HCS12SS59T_LINORM);
+	hcs12ss59t_set_lights(HCS12SS59T_LINORM);
 	hcs12ss59t_set_brightness(HCS12SS59T_DEFAULT_BRIGHTNESS);
 }
 
@@ -124,4 +124,13 @@ void hcs12ss59t_set_buffer(char *data)
 		hcs12ss59t_send_byte(*ptr);
 	}
 	HCS12SS59T_DESELECT;
+}
+
+/**
+ * @brief hcs12ss59t_set_lights Set the display mode to on, off or test
+ * @param lights value, use constants HCS12SS59T_LI*
+ */
+void hcs12ss59t_set_lights(char lights)
+{
+	hcs12ss59t_send_cmd(HCS12SS59T_LIGHTS, lights);
 }

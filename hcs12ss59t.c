@@ -39,8 +39,7 @@ void hcs12ss59t_init()
 			(1 << HCS12SS59T_SPI_SCK) |
 			(1 << HCS12SS59T_SPI_SS_N) |
 			(1 << HCS12SS59T_SPI_RESET_N);
-	SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0) |
-			(1 << SPR1) | (1 << DORD);
+	SPCR = (1 << SPE) | (1 << MSTR) | (1 << DORD) | (1 << SPR0);
 
 	hcs12ss59t_reset();
 }

@@ -154,3 +154,74 @@ void hcs12ss59t_set_lights(char lights)
 {
 	hcs12ss59t_send_cmd(HCS12SS59T_LIGHTS, lights);
 }
+
+const char hcs12ss59t_bar_styles[2][5][2] = {
+	{
+		{0x84, 0x83}, // Full on
+		{0x80, 0x00}, // 1
+		{0x80, 0x80}, // 2
+		{0x80, 0x81}, // 3
+		{0x80, 0x83} // 4
+	},
+	{
+		{0x48, 0x38}, // Full on
+		{0x40, 0x00}, // 1
+		{0x40, 0x20}, // 2
+		{0x40, 0x30}, // 3
+		{0x40, 0x38} // 4
+	},
+};
+
+/**
+ * @brief hcs12ss59t_set_progress Set the progress bar value
+ * @param top Top progress bar value. 0 - HCS12SS59T_NUMDIGITS * 5
+ * @param bottom Bottom progress bar value. 0 - HCS12SS59T_NUMDIGITS * 5
+ */
+void hcs12ss59t_set_progress(int top, int bottom)
+{
+	char charconf[HCS12SS59T_NUMDIGITS * 2];
+	int full;
+	int last;
+	char *ptr;
+	int row;
+
+	// Sanitize input
+	if (top > HCS12SS59T_NUMDIGITS * 5)
+		top = HCS12SS59T_NUMDIGITS * 5;
+	if (bottom > HCS12SS59T_NUMDIGITS * 5)
+		bottom = HCS12SS59T_NUMDIGITS * 5;
+
+	// Clear memory
+	for (ptr = charconf; ptr < charconf + HCS12SS59T_NUMDIGITS * 2; ++ptr) {
+		*ptr = 0;
+	}
+
+	// Calculate top memory
+	for (row = 0; row < 2; ++row) {
+		if (row == 0) {
+			full = top / 5;
+			last = top % 5;
+		} else {
+			full = bottom / 5;
+			last = bottom % 5;
+		}
+		for (ptr = charconf; ptr < charconf + full * 2; ++ptr) {
+			*(ptr++) |= hcs12ss59t_bar_styles[row][0][0];
+			*ptr |= hcs12ss59t_bar_styles[row][0][1];
+		}
+		if (last != 0) {
+			*(ptr++) |= hcs12ss59t_bar_styles[row][last][0];
+			*ptr |= hcs12ss59t_bar_styles[row][last][1];
+		}
+	}
+
+	hcs12ss59t_set_character(0, charconf, HCS12SS59T_NUMDIGITS);
+}
+
+/**
+ * @brief hcs12ss59t_en_progress Prepare display for progress bar mode.
+ */
+void hcs12ss59t_en_progress()
+{
+	hcs12ss59t_set_buffer("\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B");
+}

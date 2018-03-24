@@ -53,7 +53,8 @@ void hcs12ss59t_set_buffer(char *data);
 void hcs12ss59t_set_brightness(char brightness);
 void hcs12ss59t_set_lights(char lights);
 void hcs12ss59t_set_character(int addr, char *data, int nchar);
-void hcs12ss59t_set_progress(int top, int bottom);
+void hcs12ss59t_set_progress_peak(uint8_t top, uint8_t bottom, uint8_t peak_top, uint8_t peak_bottom);
+#define hcs12ss59t_set_progress(top,bottom) hcs12ss59t_set_progress_peak(top, bottom, 0, 0)
 void hcs12ss59t_en_progress();
 
 /* Low level functions */

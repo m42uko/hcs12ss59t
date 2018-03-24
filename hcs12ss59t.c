@@ -168,7 +168,24 @@ const char hcs12ss59t_bar_styles[2][5][2] = {
 		{0x40, 0x20}, // 2
 		{0x40, 0x30}, // 3
 		{0x40, 0x38} // 4
+	}
+};
+
+const char hcs12ss59t_tick_styles[2][5][2] = {
+	{
+		{0x80, 0x00}, // 1
+		{0x00, 0x80}, // 2
+		{0x00, 0x01}, // 3
+		{0x00, 0x02}, // 4
+		{0x04, 0x00} // 5
 	},
+	{
+		{0x40, 0x00}, // 1
+		{0x00, 0x20}, // 2
+		{0x00, 0x10}, // 3
+		{0x00, 0x08}, // 4
+		{0x08, 0x00} // 5
+	}
 };
 
 /**
@@ -176,7 +193,8 @@ const char hcs12ss59t_bar_styles[2][5][2] = {
  * @param top Top progress bar value. 0 - HCS12SS59T_NUMDIGITS * 5
  * @param bottom Bottom progress bar value. 0 - HCS12SS59T_NUMDIGITS * 5
  */
-void hcs12ss59t_set_progress(int top, int bottom)
+void hcs12ss59t_set_progress_peak(uint8_t top, uint8_t bottom,
+				  uint8_t peak_top, uint8_t peak_bottom)
 {
 	char charconf[HCS12SS59T_NUMDIGITS * 2];
 	int full;
@@ -189,10 +207,28 @@ void hcs12ss59t_set_progress(int top, int bottom)
 		top = HCS12SS59T_NUMDIGITS * 5;
 	if (bottom > HCS12SS59T_NUMDIGITS * 5)
 		bottom = HCS12SS59T_NUMDIGITS * 5;
+	if (peak_top > HCS12SS59T_NUMDIGITS * 5)
+		peak_top = HCS12SS59T_NUMDIGITS * 5;
+	if (peak_bottom > HCS12SS59T_NUMDIGITS * 5)
+		peak_bottom = HCS12SS59T_NUMDIGITS * 5;
 
 	// Clear memory
 	for (ptr = charconf; ptr < charconf + HCS12SS59T_NUMDIGITS * 2; ++ptr) {
 		*ptr = 0;
+	}
+
+	// Calculate ticks
+	if (peak_top != 0) {
+		peak_top--;
+		ptr = charconf + ((peak_top / 5) * 2);
+		*(ptr++) |= hcs12ss59t_tick_styles[0][peak_top % 5][0];
+		*ptr |= hcs12ss59t_tick_styles[0][peak_top % 5][1];
+	}
+	if (peak_bottom != 0) {
+		peak_bottom--;
+		ptr = charconf + ((peak_bottom / 5) * 2);
+		*(ptr++) |= hcs12ss59t_tick_styles[1][peak_bottom % 5][0];
+		*ptr |= hcs12ss59t_tick_styles[1][peak_bottom % 5][1];
 	}
 
 	// Calculate top memory
